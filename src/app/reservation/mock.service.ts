@@ -1,0 +1,34 @@
+import { Injectable } from '@angular/core';
+import { Reservation } from '../models/reservation';
+import { OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class MockService {
+  
+  constructor(private http: HttpClient){}
+  private apiUrl = 'http://localhost:3001';
+  private reservationList: Reservation[] = [];
+  getReservations(): Observable<Reservation[]>{
+    return this.http.get<Reservation[]>(this.apiUrl + '/reservations');
+  }
+
+  getReservationById(id: string): Observable<Reservation> {
+    return this.http.get<Reservation>(this.apiUrl + '/reservation/' + id);
+  }
+
+  addReservation(reservation: Reservation): Observable<void> {
+    return this.http.post<void>(this.apiUrl + '/reservation', reservation);
+  }
+
+  removeReservation(id: string): Observable<void> {
+    return this.http.delete<void>(this.apiUrl + '/reservation/' + id);  
+  }
+
+  updateReservation(reservation: Reservation): Observable<void> {
+    return this.http.put<void>(this.apiUrl + '/reservation/' + reservation.id, reservation);   
+  }
+}
